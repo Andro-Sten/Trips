@@ -1,65 +1,36 @@
-# trips
--traps trulli mängu kood Pythonis
+from tkinter import *
 
-# Mängulaud, mis koosneb 3 reast ja 3 veerust
-board = [
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-    [' ', ' ', ' ']
-]
 
-# Funktsioon mängulaua väljastamiseks
-def print_board(board):
-    print('-------------')
-    for row in board:
-        print('|', row[0], '|', row[1], '|', row[2], '|')
-        print('-------------')
+class TripsTrapsTrull:
+    def __init__(self, master):
+        self.master = master
+        master.title("Trips Traps Trull")
+        self.current_player = "X"
+        self.board = ["", "", "", "", "", "", "", "", ""]
+        self.buttons = []
 
-# Funktsioon, mis kontrollib, kas mäng on lõppenud või mitte
-def check_game_over(board):
-    # Kontrollime ridu ja veerge, kas on olemas 3 järjestikust 'X' või 'O'
-    for i in range(3):
-        if board[i][0] == board[i][1] == board[i][2] != ' ':
-            return True
-        elif board[0][i] == board[1][i] == board[2][i] != ' ':
-            return True
-  # Kontrollime diagonaale, kas on olemas 3 järjestikust 'X' või 'O'
-    if board[0][0] == board[1][1] == board[2][2] != ' ':
-        return True
-    elif board[2][0] == board[1][1] == board[0][2] != ' ':
-        return True
-    # Kui mängulaud on täis, siis on mäng lõppenud
-    for row in board:
-        for item in row:
-            if item == ' ':
-                return False
-    return True
-    
-# Mängu käigu funktsioon
-def make_move(board, player):
-    print(f"{player}, sinu kord!")
-    row = int(input("Sisesta rida (1-3): "))
-    col = int(input("Sisesta veerg (1-3): "))
-    if board[row-1][col-1] != ' ':
-        print("Sellel positsioonil on juba midagi!")
-        make_move(board, player)
-    else:
-        board[row-1][col-1] = player
+        for i in range(9):
+            button = Button(master, text="", font=("Arial", 20), height=3, width=6,
+                            command=lambda i=i: self.play_turn(i))
+            button.grid(row=i // 3, column=i % 3)
+            self.buttons.append(button)
 
-# Mängu alustamine
-print_board(board)
-game_over = False
-while not game_over:
-    make_move(board, 'X')
-    print_board(board)
-    game_over = check_game_over(board)
-    if game_over:
-        print("Mäng on lõppenud! Võitis X!")
-        break
-    make_move(board, 'O')
-    print_board(board)
-    game_over = check_game_over(board)
-    if game_over:
-        print("Mäng on lõppenud! Võitis O!")
-        break
-  
+        self.status_label = Label(master, text="Mäng käib, alustab X")
+        self.status_label.grid(row=3, column=0, columnspan=3)
+
+        self.reset_button = Button(master, text="Alusta uut mängu", command=self.reset)
+        self.reset_button.grid(row=4, column=0, columnspan=3)
+
+    def play_turn(self, i):
+        if self.board[i] == "":
+            self.board[i] = self.current_player
+            self.buttons[i].config(text=self.current_player)
+            if self.check_win():
+                self.status_label.config(text=f"{self.current_player} võitis!")
+                self.disable_buttons()
+            elif self.check_tie():
+                self.status_label.config(text="Viik!")
+                self.disable_buttons()
+            else:
+                self.switch_players()
+                self.status_label.config(text=f"Mäng käib, järgmine käik: {self.current_player}")
