@@ -1,25 +1,25 @@
 from tkinter import *
 
 class TripsTrapsTrull:
-    def init(self, master):
+    def __init__(self, master):
         self.master = master
         master.title("Trips Traps Trull")
         master.configure(background="black")  # Muudame tausta mustaks
         self.current_player = "X"
         self.board = ["", "", "", "", "", "", "", "", ""]
         self.buttons = []
-
+        
         for i in range(9):
-            button = Button(master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i), bg="black", activebackground="black", fg="white", activeforeground="white", bd=0)
+            button = Button(master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i))
             button.grid(row=i//3, column=i%3)
             self.buttons.append(button)
-
+        
         self.status_label = Label(master, text="Mäng käib, alustab X", fg="white", bg="black")
         self.status_label.grid(row=3, column=0, columnspan=3)
-
+        
         self.reset_button = Button(master, text="Alusta uut mängu", command=self.reset)
         self.reset_button.grid(row=4, column=0, columnspan=3)
-
+        
     def play_turn(self, i):
         if self.board[i] == "":
             self.board[i] = self.current_player
@@ -33,44 +33,4 @@ class TripsTrapsTrull:
             else:
                 self.switch_players()
                 self.status_label.config(text=f"Mäng käib, järgmine käik: {self.current_player}")
-                def switch_players(self):
-        if self.current_player == "X":
-            self.current_player = "O"
-        else:
-            self.current_player = "X"
-
-    def check_win(self):
-        win_positions = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ]
-        for pos in win_positions:
-            if self.board[pos[0]] == self.board[pos[1]] == self.board[pos[2]] != "":
-                return True
-        return False
-
-    def check_tie(self):
-        return "" not in self.board
-
-    def disable_buttons(self):
-        for button in self.buttons:
-            button.config(state=DISABLED)
-
-    def reset(self):
-        self.current_player = "X"
-        self.board = ["", "", "", "", "", "", "", "", ""]
-        for i in range(9):
-            self.buttons[i].config(text="")
-            self.buttons[i].config(state=NORMAL)
-        self.status_label.config(text="Mäng käib, alustab X")
-
-root = Tk()
-game = TripsTrapsTrull(root)
-root.mainloop()
                 
