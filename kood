@@ -35,7 +35,7 @@ def check_game_over(board):
                 return False
     return True
     
-    # Mängu käigu funktsioon
+# Mängu käigu funktsioon
 def make_move(board, player):
     print(f"{player}, sinu kord!")
     row = int(input("Sisesta rida (1-3): "))
