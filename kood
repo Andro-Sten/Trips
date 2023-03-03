@@ -34,7 +34,7 @@ class TripsTrapsTrull:
                 self.switch_players()
                 self.status_label.config(text=f"Mäng käib, järgmine käik: {self.current_player}")
                 
-                def switch_players(self):
+    def switch_players(self):
         if self.current_player == "X":
             self.current_player = "O"
         else:
