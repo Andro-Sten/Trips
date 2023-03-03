@@ -10,7 +10,7 @@ class TripsTrapsTrull:
         self.buttons = []
 
         for i in range(9):
-            button = Button(master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i))
+            button = Button(master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i), bg="black", activebackground="black", fg="white", activeforeground="white", bd=0)
             button.grid(row=i//3, column=i%3)
             self.buttons.append(button)
 
