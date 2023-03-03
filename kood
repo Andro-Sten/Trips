@@ -33,3 +33,44 @@ class TripsTrapsTrull:
             else:
                 self.switch_players()
                 self.status_label.config(text=f"Mäng käib, järgmine käik: {self.current_player}")
+                def switch_players(self):
+        if self.current_player == "X":
+            self.current_player = "O"
+        else:
+            self.current_player = "X"
+
+    def check_win(self):
+        win_positions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+        for pos in win_positions:
+            if self.board[pos[0]] == self.board[pos[1]] == self.board[pos[2]] != "":
+                return True
+        return False
+
+    def check_tie(self):
+        return "" not in self.board
+
+    def disable_buttons(self):
+        for button in self.buttons:
+            button.config(state=DISABLED)
+
+    def reset(self):
+        self.current_player = "X"
+        self.board = ["", "", "", "", "", "", "", "", ""]
+        for i in range(9):
+            self.buttons[i].config(text="")
+            self.buttons[i].config(state=NORMAL)
+        self.status_label.config(text="Mäng käib, alustab X")
+
+root = Tk()
+game = TripsTrapsTrull(root)
+root.mainloop()
+                
