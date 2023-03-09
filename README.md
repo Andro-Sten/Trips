@@ -6,3 +6,4 @@ Iga liikme tööülesanne:
 William: Kirjutas koodi.
 Andro-Sten Kriisa: Aitas Williamil koodi kirjutada, viimistles.
 Sten: Otsis vigu ja testis koode pycharmis.
+2023
