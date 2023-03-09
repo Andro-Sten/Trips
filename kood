@@ -8,69 +8,59 @@ class TripsTrapsTrull:
         self.current_player = "X"
         self.board = ["", "", "", "", "", "", "", "", ""]
         self.buttons = []
-        
+
+        # Loome tiimi valiku dialoogiakna
+        self.team_choice = Toplevel()
+        self.team_choice.title("Vali tiim")
+        self.team_choice.configure(background="black")
+        self.team_choice_label = Label(self.team_choice, text="Vali oma tiim:")
+        self.team_choice_label.pack()
+        self.team_choice_x_button = Button(self.team_choice, text="X", command=lambda: self.set_team("X"))
+        self.team_choice_x_button.pack()
+        self.team_choice_o_button = Button(self.team_choice, text="O", command=lambda: self.set_team("O"))
+        self.team_choice_o_button.pack()
+
+    def set_team(self, team):
+        self.team = team
+        self.team_choice.destroy()  # Sulgeme tiimi valiku dialoogiakna
+        self.create_game_board()  # Loome mängulauda
+
+    def create_game_board(self):
         for i in range(9):
-            button = Button(master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i))
+            button = Button(self.master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i))
             button.grid(row=i//3, column=i%3)
             self.buttons.append(button)
-        
-        self.status_label = Label(master, text="Mäng käib, alustab X", fg="white", bg="black")
-        self.status_label.grid(row=3, column=0, columnspan=3)
-        
-        self.reset_button = Button(master, text="Alusta uut mängu", command=self.reset)
-        self.reset_button.grid(row=4, column=0, columnspan=3)
-        
+
     def play_turn(self, i):
         if self.board[i] == "":
             self.board[i] = self.current_player
             self.buttons[i].config(text=self.current_player)
-            if self.check_win():
-                self.status_label.config(text=f"{self.current_player} võitis!")
-                self.disable_buttons()
-            elif self.check_tie():
-                self.status_label.config(text="Viik!")
-                self.disable_buttons()
+            if self.current_player == "X":
+                self.current_player = "O"
             else:
-                self.switch_players()
-                self.status_label.config(text=f"Mäng käib, järgmine käik: {self.current_player}")
-                
-    def switch_players(self):
-        if self.current_player == "X":
-            self.current_player = "O"
+                self.current_player = "X"
         else:
-            self.current_player = "X"
+            print("Invalid move")
+        self.check_winner()
 
-    def check_win(self):
-        win_positions = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ]
-        for pos in win_positions:
-            if self.board[pos[0]] == self.board[pos[1]] == self.board[pos[2]] != "":
-                return True
-        return False
-
-    def check_tie(self):
-        return "" not in self.board
+    def check_winner(self):
+        winning_combinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+        for combination in winning_combinations:
+            if self.board[combination[0]] == self.board[combination[1]] == self.board[combination[2]] != "":
+                winner = self.board[combination[0]]
+                print("Winner:", winner)
+                self.disable_buttons()
+                break
+        else:
+            if "" not in self.board:
+                print("Draw")
+                self.disable_buttons()
 
     def disable_buttons(self):
         for button in self.buttons:
-            button.config(state=DISABLED)
+            button.config(state="disabled")
 
-    def reset(self):
-        self.current_player = "X"
-        self.board = ["", "", "", "", "", "", "", "", ""]
-        for i in range(9):
-            self.buttons[i].config(text="")
-            self.buttons[i].config(state=NORMAL)
-        self.status_label.config(text="Mäng käib, alustab X")
-
-root = Tk()
-game = TripsTrapsTrull(root)
-root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    game = TripsTrapsTrull(root)
+    root.mainloop()
