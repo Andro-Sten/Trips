@@ -25,6 +25,13 @@ class TripsTrapsTrull:
         self.team_choice.destroy()  # Sulgeme tiimi valiku dialoogiakna
         self.create_game_board()  # Loome mängulauda
 
+    def set_team(self, team):
+        self.team = team
+        self.team_choice.destroy()  # Sulgeme tiimi valiku dialoogiakna
+        if self.team == "O":
+            self.current_player = "O"
+        self.create_game_board()  # Loome mängulauda
+
     def create_game_board(self):
         for i in range(9):
             button = Button(self.master, text="", font=("Arial", 20), height=3, width=6, command=lambda i=i:self.play_turn(i))
@@ -48,12 +55,12 @@ class TripsTrapsTrull:
         for combination in winning_combinations:
             if self.board[combination[0]] == self.board[combination[1]] == self.board[combination[2]] != "":
                 winner = self.board[combination[0]]
-                print("Winner:", winner)
+                print("VÕITJA", winner)
                 self.disable_buttons()
                 break
         else:
             if "" not in self.board:
-                print("Draw")
+                print("VIIK")
                 self.disable_buttons()
 
     def disable_buttons(self):
