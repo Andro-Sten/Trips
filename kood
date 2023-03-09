@@ -74,5 +74,3 @@ class TripsTrapsTrull:
 root = Tk()
 game = TripsTrapsTrull(root)
 root.mainloop()
-                
-                
