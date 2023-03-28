@@ -6,7 +6,7 @@
 # Projekti idee 
 * Trips traps trull mäng Pythoni alusel
 # Projekti käivitamiseks vajalikud moodulid
-Kõik projekti käivitamiseks vajalikud moodulid on sisseehitatud PyCharmi.
+* Kõik projekti käivitamiseks vajalikud moodulid on sisseehitatud PyCharmi.
 # Iga liikme tööülesanne
 * William: Kirjutas koodi.
 * Andro-Sten Kriisa: Aitas Williamil koodi kirjutada, viimistles.
