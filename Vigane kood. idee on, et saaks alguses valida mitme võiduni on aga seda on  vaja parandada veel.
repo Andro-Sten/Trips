@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter.messagebox as messagebox
 import random
-
+ 
 class TripsTrapsTrull:
     def __init__(self, master):
         self.master = master
@@ -13,7 +13,7 @@ class TripsTrapsTrull:
         self.current_player = "X"
         self.board = ["", "", "", "", "", "", "", "", ""]
         self.buttons = []
-
+ 
         self.team_choice = Toplevel()
         self.team_choice.title("Vali tiim")
         self.team_choice.configure(background="black")
@@ -23,7 +23,7 @@ class TripsTrapsTrull:
         self.team_choice_x_button.pack()
         self.team_choice_o_button = Button(self.team_choice, text="O", command=lambda: self.set_team("O"))
         self.team_choice_o_button.pack()
-
+ 
         self.games_left_choice = Toplevel()
         self.games_left_choice.title("Vali mängude arv")
         self.games_left_choice.configure(background="black")
@@ -34,27 +34,31 @@ class TripsTrapsTrull:
         self.games_left_choice_confirm_button = Button(self.games_left_choice, text="Kinnita",
                                                        command=self.set_games_left)
         self.games_left_choice_confirm_button.pack()
-
+ 
     def set_team(self, team):
         self.team = team
         self.team_choice.destroy()
         if self.team == "O":
             self.current_player = "O"
             self.computer_turn()
-
+ 
         self.create_game_board()
-
+ 
     def set_games_left(self):
-        self.games_left = int(self.games_left_choice_input.get())
+        try:
+            self.games_left = int(self.games_left_choice_input.get())
+        except ValueError:
+            messagebox.showerror("Viga", "Sisestatud väärtus ei ole number.")
+            return
         self.games_left_choice.destroy()
-
+ 
     def create_game_board(self):
         for i in range(9):
             button = Button(self.master, text="", font=("Arial", 20), height=3, width=6,
                             command=lambda i=i: self.play_turn(i))
             button.grid(row=i // 3, column=i % 3)
             self.buttons.append(button)
-
+ 
     def play_turn(self, i):
         if self.board[i] == "":
             self.board[i] = self.current_player
@@ -65,13 +69,13 @@ class TripsTrapsTrull:
                 self.change_player()
                 if self.team == "O" and self.current_player == "O":
                     self.computer_turn()
-
+ 
     def change_player(self):
         if self.current_player == "X":
             self.current_player = "O"
         else:
             self.current_player = "X"
-
+ 
     def check_win(self):
         for combo in [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]:
             if self.board[combo[0]] == self.board[combo[1]] == self.board[combo[2]] != "":
@@ -87,18 +91,42 @@ class TripsTrapsTrull:
                     self.end_tournament()
                 return True
         return False
-        if self.current_player == "X":
-            self.x_wins += 1
-        else:
-            self.o_wins += 1
-        self.games_left -= 1
+ 
+    def check_tie(self):
+        if "" not in self.board:
+            messagebox.showinfo("Mäng läbi", "Viik!")
+            self.games_left -= 1
+            if self.games_left > 0:
+                self.reset_game_board()
+            else:
+                self.end_tournament()
+            return True
+        return False
+ 
+    def reset_game_board(self):
+        self.current_player = "X"
+        self.board = ["", "", "", "", "", "", "", "", ""]
+        for button in self.buttons:
+            button.config(text="")
+        if self.team == "O":
+            self.computer_turn()
+ 
+    def computer_turn(self):
+        empty_cells = [i for i in range(9) if self.board[i] == ""]
+        if empty_cells:
+            i = random.choice(empty_cells)
+            self.play_turn(i)
+ 
+    def end_game(self):
         if self.games_left > 0:
             self.reset_game_board()
         else:
             self.end_tournament()
-        return True
-
-
+ 
+    def end_tournament(self):
+        messagebox.showinfo("Turniir läbi", f"X võitis {self.x_wins} mängu, O võitis {self.o_wins} mängu.")
+        self.master.destroy()
+ 
 root = Tk()
 game = TripsTrapsTrull(root)
 root.mainloop()
